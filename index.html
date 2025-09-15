@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Letter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #d81b60;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto 50px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+        
+        .envelope.open {
+            transform: translateY(-100px) rotateX(180deg);
+        }
+        
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .envelope-front {
+            background: linear-gradient(45deg, #e91e63, #ad1457);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            transform-origin: bottom;
+        }
+        
+        .envelope-back {
+            background: linear-gradient(45deg, #f8bbd0, #fce4ec);
+            transform: rotateX(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #c2185b;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 3;
+        }
+        
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .heart {
+            color: white;
+            font-size: 50px;
+            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        .letter {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .letter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .letter-content {
+            line-height: 1.8;
+            font-size: 1.2rem;
+            color: #333;
+            text-align: center;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .letter::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath fill='%23fce4ec' fill-opacity='0.3' d='M0 0h40v40H0z'%3E%3C/path%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 30px;
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            color: #e91e63;
+            font-size: 1.8rem;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            color: #880e4f;
+            font-weight: 500;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 650px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .envelope-container {
+                width: 250px;
+                height: 170px;
+            }
+            
+            .envelope-flap {
+                border-left: 125px solid transparent;
+                border-right: 125px solid transparent;
+                border-top: 85px solid #c2185b;
+            }
+            
+            .letter {
+                padding: 20px;
+            }
+            
+            .letter-content {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Open this</h1>
+        
+        <div class="envelope-container" id="envelope">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-front">
+                    <div class="heart">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                <div class="envelope-back">
+                    <div class="heart">
+                        <i class="fas fa-heart" style="color: #e91e63;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <p>I asked for your permission to court you. Even if you weren't fully healed when I met you, I'm here, willing to wait and prove myself. Just let me court you until your heart is ready to say yes.</p>
+                <div class="signature">With all my love</div>
+            </div>
+        </div>
+        
+        <p class="instructions">Click on the envelope to reveal the letter</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelope = document.getElementById('envelope');
+            const letter = document.getElementById('letter');
+            
+            envelope.addEventListener('click', function() {
+                this.querySelector('.envelope').classList.toggle('open');
+                
+                setTimeout(function() {
+                    letter.classList.toggle('visible');
+                }, 500);
+            });
+            
+            // Auto-open after 2 seconds
+            setTimeout(function() {
+                envelope.querySelector('.envelope').classList.add('open');
+                
+                setTimeout(function() {
+                    letter.classList.add('visible');
+                }, 500);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
